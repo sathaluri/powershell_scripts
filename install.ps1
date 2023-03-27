@@ -18,4 +18,7 @@ foreach ($software in $softwareList.Keys) {
 }
 
 # Remove downloads
-Remove-Item -Path "$env:TEMP\chocolatey" -Recurse
+if (Test-Path "$env:TEMP\chocolatey") {
+    Remove-Item -Path "$env:TEMP\chocolatey" -Recurse
+}
+
