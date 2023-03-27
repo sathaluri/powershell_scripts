@@ -1,6 +1,6 @@
 # Install Chocolatey
 if (-not(Get-Command choco.exe -ErrorAction SilentlyContinue)) {
-    iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+    Set-ExecutionPolicy Bypass -Scope Process -Force; iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
 }
 
 # Fetch the list of software to install from config.ini
@@ -17,4 +17,5 @@ foreach ($software in $softwareList.Keys) {
     }
 }
 
-
+# Remove downloads
+Remove-Item -Path "$env:TEMP\chocolatey" -Recurse
