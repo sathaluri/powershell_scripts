@@ -1,11 +1,11 @@
 # Install Chocolatey
 if (-not(Get-Command choco.exe -ErrorAction SilentlyContinue)) {
-    Set-ExecutionPolicy Bypass -Scope Process -Force; iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
+    iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 }
 
 # Fetch the list of software to install from config.ini
 $configUrl = "https://raw.githubusercontent.com/sathaluri/powershell_scripts/main/config.ini"
-$softwareList = Invoke-WebRequest -Uri $configUrl | Select-Object -ExpandProperty Content | Out-String | ConvertFrom-StringData
+$softwareList = Invoke-WebRequest -Uri $configUrl -UseBasicParsing | Select-Object -ExpandProperty Content | Out-String | ConvertFrom-StringData
 
 # Install each software if it is not already installed
 foreach ($software in $softwareList.Keys) {
@@ -16,3 +16,5 @@ foreach ($software in $softwareList.Keys) {
         Write-Host "$($software) is already installed."
     }
 }
+
+
