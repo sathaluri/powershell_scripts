@@ -21,7 +21,7 @@ while IFS= read -r line; do
     if [[ ${item[1]} == "true" ]]; then
         brew_install "${item[0]}"
     fi
-done < <(curl -s https://raw.githubusercontent.com/tinitiate/powershell/main/config.ini)
+done < <(curl -s https://raw.githubusercontent.com/sathaluri/powershell/main/config.ini)
 
 # Function to install software using Homebrew
 brew_install() {
