@@ -54,6 +54,10 @@ if grep -q "^python=true$" config.ini; then
     else
         echo "Python 3.9 is already installed."
     fi
+    
+    # set Python 3.9 as global
+    echo "Setting Python 3.9 as global..."
+    pyenv global 3.9.10
 
     # install Python packages
     echo "Installing Python packages..."
