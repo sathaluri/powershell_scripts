@@ -70,6 +70,9 @@ if grep -q "^python=true$" config.ini; then
         pip3 install djangorestframework
         pip3 install pytz
         pip3 install psycopg2-binary
+        
+        # Remove config.ini
+        rm config.ini
     fi
 fi
 
