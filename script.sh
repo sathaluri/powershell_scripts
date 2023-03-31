@@ -72,4 +72,4 @@ if grep -q "^python=true$" config.ini; then
         pip3 install psycopg2-binary
     fi
 fi
-fi
+
