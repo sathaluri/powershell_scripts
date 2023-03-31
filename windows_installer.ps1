@@ -35,15 +35,6 @@ else{
     Write-Output "SAM CLI Version is already installed"
 }
 
-# $checkssm = powershell session-manager-plugin
-# if(-not($checkssm)){
-    # Write-Output "Seems AWS SSM is not installed, installing now"
-    # powershell choco install awscli-session-manager -y
-# }
-# else{
-    # Write-Output "AWS SSM Version $checkssm is already installed"
-# }
-
 $check = ((gp HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*).DisplayName -Match "DBeaver").Length -gt 0
 if(-not($check)){
     Write-Output "Seems AWS SSM is not installed, installing now"
@@ -83,9 +74,6 @@ if($checkpip){
     powershell pip install djangorestframework
     powershell pip install pytz 
     powershell pip install psycopg2
-
-
-
 }
 else{
     Write-Output "Pip is not installed"
@@ -96,9 +84,7 @@ $w32=Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\
 if(-not($w64-or $w32)){
     Write-Output "Seems notepad++ is not installed, installing now"
 
-    choco install notepadplusplus
-
-
+    choco install notepadplusplus -y
 
 }
 else{
@@ -113,6 +99,31 @@ if(-not($check)){
 else{
     Write-Output "Git is already installed"
 }
+
+# Check if Microsoft-Windows-Subsystem-Linux feature is enabled
+$wslEnabled = dism.exe /online /Get-FeatureInfo /FeatureName:Microsoft-Windows-Subsystem-Linux | Select-String -SimpleMatch "State : Enabled"
+if(-not $wslEnabled){
+    Write-Output "Microsoft-Windows-Subsystem-Linux feature is not enabled, enabling now"
+    dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+}
+
+# Check if VirtualMachinePlatform feature is enabled
+$vmpEnabled = dism.exe /online /Get-FeatureInfo /FeatureName:VirtualMachinePlatform | Select-String -SimpleMatch "State : Enabled"
+if(-not $vmpEnabled){
+    Write-Output "VirtualMachinePlatform feature is not enabled, enabling now"
+    dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+}
+
+# Check if WSL2 is installed
+$wsl2Installed = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*" | Where-Object {$_.DisplayName -eq "Ubuntu"}
+if(-not $wsl2Installed){
+    Write-Output "WSL2 is not installed, downloading and installing now"
+    $url = "https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi"
+    $filePath = "$env:TEMP\wsl_update_x64.msi"
+    Invoke-WebRequest -Uri $url -OutFile $filePath
+    Start-Process msiexec.exe -ArgumentList "/i $filePath /quiet /norestart" -Wait
+}
+
 $checkdocker = ((gp HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*).DisplayName -Match "Docker").Length -gt 0
 if(-not($checkdocker)){
     Write-Output "Seems Docker is not installed, installing now"
@@ -121,27 +132,29 @@ if(-not($checkdocker)){
  else{
     Write-Output "Docker is already installed"
  }
+ 
+ # Check if AWS Toolkit extension for Visual Studio Code is installed
+ if ((Get-Module -Name AWS.Tools.Installer -ListAvailable)) {
+    Write-Host "AWS Toolkit for Visual Studio Code is installed."
+}
+else {
+    Write-Host "AWS Toolkit for Visual Studio Code is not installed. Installing now..."
+    Install-Module -Name AWS.Tools.Installer -Force
+}
 
-# if($checkdocker){
-    # Write-Output "Seems Docker is installed, Enabling feature(s)"
-    # dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-    # dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
-    # choco install wsl2 -y
+# Check if PowerShell extension for Visual Studio Code is installed
+if ((Get-Module -Name Microsoft.Powershell.Extension.VSCode -ListAvailable)) {
+    Write-Host "PowerShell extension for Visual Studio Code is installed."
+} else {
+    Write-Host "PowerShell extension for Visual Studio Code is not installed. Installing now..."
+    Install-Module -Name Microsoft.Powershell.Extension.VSCode -Force
+}
 
-# }
-# else{
-    # Write-Output "Docker is already installed"
-# }
+# Check if Python extension for Visual Studio Code is installed
+if ((Get-Module -Name ms-python.python -ListAvailable)) {
+    Write-Host "Python extension for Visual Studio Code is installed."
+} else {
+    Write-Host "Python extension for Visual Studio Code is not installed. Installing now..."
+    Install-Module -Name ms-python.python -Force
+}
 
-
-# $checkwsl = ((gp HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*).DisplayName -Match "Windows Subsystem for Linux Update").Length -gt 0
-
-# (gp HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*).DisplayName -Match "WSL"
-
-# if (-not($checkwsl)){
-    # Write-Output "Seems Windows Subsystem For Linux Update is not installed, installing now"
-    # powershell choco install Docker -y
-# }
-# else{
-    # Write-Output "Seems Windows Subsystem For Linux Update"
-# }
