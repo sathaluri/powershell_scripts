@@ -59,11 +59,17 @@ if grep -q "^python=true$" config.ini; then
     echo "Setting Python 3.9 as global..."
     pyenv global 3.9.10
 
-    # install Python packages
-    echo "Installing Python packages..."
-    pip3 install PyMySQL
-    pip3 install django
-    pip3 install djangorestframework
-    pip3 install pytz
-    pip3 install psycopg2-binary
+    # check if pip3 is recognized
+    if ! command -v pip3 &> /dev/null; then
+        echo "pip3 is not recognized. Please close and reopen the terminal, then run this script again to install Python packages."
+    else
+        # install Python packages
+        echo "Installing Python packages..."
+        pip3 install PyMySQL
+        pip3 install django
+        pip3 install djangorestframework
+        pip3 install pytz
+        pip3 install psycopg2-binary
+    fi
+fi
 fi
