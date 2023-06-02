@@ -9,7 +9,7 @@ else
 fi
 
 # Fetch the list of software to install from JSON file
-configUrl="https://raw.githubusercontent.com/sathaluri/powershell_scripts/main/config.json"
+configUrl="https://raw.githubusercontent.com/sathaluri/powershell_scripts/main/mac.json"
 softwareList=$(curl -s $configUrl)
 
 # Function to install software using Homebrew
