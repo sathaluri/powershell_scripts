@@ -1,0 +1,42 @@
+[
+  {
+    "package": "python3.9",
+    "install": false
+  },
+  {
+    "package": "visual-studio-code",
+    "install": false
+  },
+  {
+    "package": "awscli",
+    "install": false
+  },
+  {
+    "package": "aws-sam-cli",
+    "install": false
+  },
+  {
+    "package": "dbeaver-community",
+    "install": false
+  },
+  {
+    "package": "brew-pip",
+    "install": false
+  },
+  {
+    "package": "git",
+    "install": true
+  },
+  {
+    "package": "docker",
+    "install": false
+  },
+  {
+    "package": "googlechrome",
+    "install": true
+  },
+  {
+    "package": "notepadplusplus",
+    "install": true
+  }
+]
