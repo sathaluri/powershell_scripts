@@ -9,11 +9,17 @@ $softwareList = Invoke-WebRequest -Uri $configUrl -UseBasicParsing | Select-Obje
 
 # Install each software if it is not already installed
 foreach ($software in $softwareList.Keys) {
-    if (-not(Get-Command $software -ErrorAction SilentlyContinue)) {
-        Write-Host "Installing $($software)..."
-        choco install $software -y
+    $install = $softwareList[$software]
+    
+    if (-not (Get-Command $software -ErrorAction SilentlyContinue)) {
+        if ($install -eq "true") {
+            Write-Host "Installing $software..."
+            choco install $software -y
+        } else {
+            Write-Host "$software is not set for installation."
+        }
     } else {
-        Write-Host "$($software) is already installed."
+        Write-Host "$software is already installed."
     }
 }
 
@@ -21,4 +27,3 @@ foreach ($software in $softwareList.Keys) {
 if (Test-Path "$env:TEMP\chocolatey") {
     Remove-Item -Path "$env:TEMP\chocolatey" -Recurse
 }
-
