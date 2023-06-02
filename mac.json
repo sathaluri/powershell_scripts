@@ -31,10 +31,7 @@
     "package": "docker",
     "install": false
   },
-  {
-    "package": "googlechrome",
-    "install": true
-  },
+ 
   {
     "package": "notepadplusplus",
     "install": true
