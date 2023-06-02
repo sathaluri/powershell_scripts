@@ -9,7 +9,7 @@
   },
   {
     "package": "awscli",
-    "install": false
+    "install": true
   },
   {
     "package": "aws-sam-cli",
