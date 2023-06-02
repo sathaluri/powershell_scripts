@@ -8,8 +8,8 @@ else
     echo "Homebrew is already installed."
 fi
 
-# Fetch the list of software to install from config.ini
-configUrl="https://raw.githubusercontent.com/sathaluri/powershell_scripts/main/config.ini"
+# Fetch the list of software to install from JSON file
+configUrl="https://raw.githubusercontent.com/sathaluri/powershell_scripts/main/config.json"
 softwareList=$(curl -s $configUrl)
 
 # Function to install software using Homebrew
@@ -24,14 +24,16 @@ brew_install() {
     fi
 }
 
-# Install software from config.ini
-echo "Reading software list from config.ini..."
-while IFS='=' read -r software install; do
-    if [[ $software == \#* ]]; then
-        continue
-    fi
+# Install software from JSON file
+echo "Reading software list from JSON file..."
+packageCount=$(echo $softwareList | jq '. | length')
+
+for ((i=0; i<$packageCount; i++))
+do
+    package=$(echo $softwareList | jq -r .[$i].package)
+    install=$(echo $softwareList | jq -r .[$i].install)
     
     if [[ $install == "true" ]]; then
-        brew_install "$software"
+        brew_install "$package"
     fi
-done <<< "$softwareList"
+done
